@@ -1,3 +1,59 @@
+# Mini React Dashboard
+
+This is a small React dashboard application demonstrating routing, state management, API integration, and simple CRUD operations for users and projects.
+
+## Features
+- Dummy Login (localStorage-based)
+- Dashboard showing stats (users from external API, projects from local mock data)
+- User Management: fetch users from https://jsonplaceholder.typicode.com/users, search, sort, inline edit, delete with confirmation
+- Project Management: create projects (name, description, status), inline edit, delete, stored in localStorage
+- Navigation sidebar with active page highlighting
+
+## Libraries used
+- React
+- React Router (v6)
+- Axios
+- Formik & Yup are included in package.json if you want to extend forms
+
+## Setup
+
+1. Install dependencies
+
+```bash
+npm install
+# or inside the project folder
+npm --prefix ./my-demo install
+```
+
+2. Run the app locally
+
+```bash
+npm --prefix ./my-demo start
+```
+
+3. Build for production
+
+```bash
+npm --prefix ./my-demo run build
+```
+
+## Project structure
+
+- `src/pages` - contains `Login`, `Dashboard`, `Users`, and `Projects` pages
+- `src/components` - `Navbar`, `ProtectedRoute`
+- `src/style.css` - basic styles for the app
+
+## Limitations and Improvements
+
+- The app uses dummy authentication (localStorage token). For real apps, use proper authentication and secure storage.
+- No server-side persistence for projects or user edits — currently stored in localStorage. Could be connected to an API.
+- User edits are local only (no PUT to the placeholder API). Implement a real backend to persist changes.
+- Added inline edits and simple confirm dialogs; could be improved with proper modals/drawers and form validation.
+- Better styling and accessibility improvements can be added.
+
+## Notes
+
+Please push this repository to a public GitHub repo and share the link for review. I built and validated a production build locally.
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

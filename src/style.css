@@ -1,0 +1,120 @@
+:root{
+  --bg:#f6f8fa;
+  --card:#ffffff;
+  --accent:#2b6cb0;
+  --danger:#e53e3e;
+}
+*{box-sizing:border-box}
+body{font-family:Inter,system-ui,Arial,Helvetica,sans-serif;background:var(--bg);margin:0;color:#111}
+.app-layout{display:flex;min-height:100vh}
+.navbar{width:220px;background:#0f1724;color:#fff;padding:16px;display:flex;flex-direction:column;gap:12px}
+.nav-brand{font-weight:700;font-size:1.1rem}
+.nav-links a{display:block;color:rgba(255,255,255,0.85);text-decoration:none;margin:6px 0;padding:6px;border-radius:4px}
+.nav-links a.active, .nav-links a:hover{background:rgba(255,255,255,0.06)}
+.nav-actions{margin-top:auto}
+
+/* Make logout button match the size and style of the nav links */
+.btn-logout{
+  display:block;
+  width:100%;
+  text-align:left;
+  color:rgba(255,255,255,0.85);
+  background:transparent;
+  border:none;
+  padding:6px;
+  margin:6px 0;
+  border-radius:4px;
+  cursor:pointer;
+}
+.btn-logout:hover{background:rgba(255,255,255,0.06)}
+.main-area{flex:1;padding:24px}
+.card{background:var(--card);padding:16px;border-radius:8px;box-shadow:0 1px 4px rgba(2,6,23,0.06);margin-bottom:16px}
+.stat-card{background:linear-gradient(135deg,#ffffff 0%, #eef6ff 100%);padding:12px;border-radius:8px;width:180px}
+.stats-row{display:flex;gap:12px;margin-bottom:12px}
+.users-table,.projects-table{width:100%;border-collapse:collapse}
+.users-table th,.users-table td,.projects-table th,.projects-table td{padding:8px;border-bottom:1px solid #eee}
+.table-controls{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.table-controls.center{justify-content:center;gap:20px}
+.table-controls.left{justify-content:flex-start;gap:14px}
+
+/* Search box styling */
+.search-box{display:flex;align-items:center;gap:8px;background:#fff;padding:8px 12px;border-radius:999px;box-shadow:0 6px 18px rgba(15,23,36,0.06);border:1px solid rgba(2,6,23,0.04)}
+.search-icon{font-size:16px;opacity:0.7}
+.search-input{border:none;outline:none;padding:6px 8px;width:260px;font-size:14px}
+.btn-clear{background:transparent;border:none;color:#666;cursor:pointer;padding:6px 8px;border-radius:6px}
+.btn-clear:hover{background:rgba(2,6,23,0.04)}
+
+.sort-box{display:flex;align-items:center;gap:8px}
+.sort-select{padding:6px 8px;border-radius:6px;border:1px solid #ddd;background:#fff}
+
+/* Confirmation modal for delete actions */
+.confirm-modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(2,6,23,0.28);z-index:400}
+.confirm-box{max-width:420px;padding:20px;border-radius:10px;text-align:left}
+.confirm-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}
+.btn-clear{background:transparent;border:1px solid #ddd;padding:6px 10px;border-radius:6px;cursor:pointer}
+.btn-clear:hover{background:rgba(2,6,23,0.03)}
+/* Secondary button style for modals/actions */
+.btn-secondary{background:#fff;border:1px solid #d1d5db;color:#374151;padding:6px 10px;border-radius:6px;cursor:pointer}
+.btn-secondary:hover{background:#f3f4f6}
+.edit-drawer-overlay{position:fixed;inset:0;display:flex;justify-content:flex-end;z-index:450;background:rgba(2,6,23,0.18)}
+.edit-drawer{width:380px;height:100%;padding:20px;border-radius:8px 0 0 8px;box-shadow:-12px 0 40px rgba(2,6,23,0.12);display:flex;flex-direction:column}
+.edit-drawer input{margin-top:6px}
+.page h2{margin-top:0}
+.auth-card{max-width:420px;margin:40px auto;padding:24px}
+.login-page{display:flex;align-items:center;justify-content:center}
+input,select,textarea{padding:8px;border:1px solid #ddd;border-radius:6px;width:100%}
+.project-form{display:grid;grid-template-columns:1fr 1fr 160px 120px;gap:8px;align-items:end}
+.btn-primary{background:var(--accent);color:#fff;padding:8px 10px;border:none;border-radius:6px}
+.btn-danger{background:var(--danger);color:#fff;padding:6px 8px;border:none;border-radius:6px}
+.btn-sm{padding:6px 10px;font-size:13px;border-radius:8px}
+
+/* Outline / subtle button used for non-primary actions */
+.btn-outline{background:transparent;border:1px solid #e6edf3;color:#0f1724}
+.btn-outline:hover{background:#f8fafc;transform:translateY(-2px);box-shadow:0 8px 20px rgba(15,23,36,0.06)}
+
+/* Make primary buttons feel 'clickable' and modern */
+.btn-primary{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;box-shadow:0 6px 18px rgba(43,108,176,0.12);transition:transform .12s ease,box-shadow .12s ease}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(43,108,176,0.16)}
+.btn-primary:active{transform:translateY(-1px)}
+.btn-primary::before{content:''}
+
+/* Destructive / delete button styling */
+.btn-danger{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:8px 14px;border-radius:10px;background:linear-gradient(180deg,#ef4444 0%,#dc2626 100%);box-shadow:0 8px 24px rgba(220,38,38,0.12);border:none;transition:transform .12s ease,box-shadow .12s ease;font-weight:600;font-size:15px}
+.btn-danger:hover{transform:translateY(-3px);box-shadow:0 14px 32px rgba(220,38,38,0.16)}
+.btn-danger:active{transform:translateY(-1px)}
+/* remove icon for delete button */
+.btn-danger::before{content:''}
+
+.row-actions{display:inline-flex;gap:12px;align-items:center}
+.error{color:var(--danger);margin-bottom:8px}
+
+/* Loader overlay used during login/register async ops */
+.loader-overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.18);z-index:200}
+.loader{width:48px;height:48px;border-radius:50%;border:6px solid rgba(255,255,255,0.4);border-top-color:var(--accent);animation:spin 0.9s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+
+.projects-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.projects-table th,
+.projects-table td {
+  padding: 10px 12px;
+  text-align: left;
+  vertical-align: middle;
+  white-space: nowrap;
+  border-bottom: 1px solid #eee;
+}
+
+.projects-table td:nth-child(2) {
+  white-space: normal; /* description wraps safely */
+}
+
+.row-actions {
+  display: flex;
+  gap: 8px;
+  white-space: nowrap;
+}
