@@ -22,7 +22,7 @@ const Navbar = () => {
 
   return (
     <nav className="navbar">
-      <div className="nav-brand">WeEnggs Dashboard</div>
+      <div className="nav-brand">Ashutosh Dashboard</div>
 
       <div className="nav-links">
         {isLoggedIn && (
