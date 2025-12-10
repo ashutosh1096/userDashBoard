@@ -6,28 +6,35 @@ import {
   updateProject,
 } from "../store/projectsSlice";
 
+interface Project {
+  id: number;
+  name: string;
+  description: string;
+  status: string;
+}
+
 const ProjectsRedux = () => {
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<{ name: string; description: string; status: string }>({
     name: "",
     description: "",
     status: "planning",
   });
-  const projects = useSelector((state) => state.projects);
+  const projects = useSelector((state: any) => state.projects as Project[]);
   const [editOpen, setEditOpen] = useState(false);
-  const [editProject, setEditProject] = useState(null);
+  const [editProject, setEditProject] = useState<Project | null>(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
-  const [toDelete, setToDelete] = useState(null);
+  const [toDelete, setToDelete] = useState<{ id: number; name: string } | null>(null);
 
   const dispatch = useDispatch();
 
-  function handleSubmit(e) {
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const next = { ...form, id: Date.now() };
+    const next: Project = { ...form, id: Date.now() };
     dispatch(addProject(next));
     setForm({ name: "", description: "", status: "planning" });
   }
 
-  function handleDeleteClick(id, name) {
+  function handleDeleteClick(id: number, name: string) {
     setToDelete({ id, name });
     setConfirmOpen(true);
   }
@@ -44,13 +51,13 @@ const ProjectsRedux = () => {
     setConfirmOpen(false);
   }
 
-  function openEditModal(project) {
+  function openEditModal(project: Project) {
     setEditProject({ ...project });
     setEditOpen(true);
   }
 
-  function handleModalChange(field, value) {
-    setEditProject((prev) => ({ ...prev, [field]: value }));
+  function handleModalChange(field: keyof Project, value: string) {
+    setEditProject((prev) => prev ? { ...prev, [field]: value } : prev);
   }
 
   function handleModalSave() {
@@ -120,7 +127,7 @@ const ProjectsRedux = () => {
                   <td>{p.description}</td>
                   <td>{p.status}</td>
                   <td>
-                    <div className="row-actions">
+                    <div className="row-actions" style={{ display: 'flex', flexDirection: 'row', gap: 8, flexWrap: 'nowrap' }}>
                       <button
                         className="btn-outline btn-sm"
                         onClick={() => openEditModal(p)}

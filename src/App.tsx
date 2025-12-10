@@ -10,7 +10,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import "./style.css";
 
 function App() {
-  const loading = useSelector(state => state.auth && state.auth.loading);
+  const loading = useSelector((state: any) => state.auth && state.auth.loading);
 
   return (
     <HashRouter>

@@ -1,33 +1,41 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { initialProjectsSample } from '../store/projectsSlice';
 
-const StatCard = ({ title, value }) => (
+interface StatCardProps {
+  title: string;
+  value: number;
+}
+const StatCard: React.FC<StatCardProps> = ({ title, value }) => (
   <div className="stat-card">
     <div className="stat-title">{title}</div>
     <div className="stat-value">{value}</div>
   </div>
 );
 
-const Dashboard = () => {
-  const [users, setUsers] = useState([]);
-  const [projects, setProjects] = useState([]);
+interface Project {
+  id: number;
+  name: string;
+  description: string;
+  status: string;
+}
 
-  useEffect(()=>{
+const Dashboard = () => {
+  const [users, setUsers] = useState<any[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
+
+  useEffect(() => {
     axios.get('https://jsonplaceholder.typicode.com/users')
-      .then(res=> setUsers(res.data))
-      .catch(()=>{});
+      .then(res => setUsers(res.data))
+      .catch(() => { });
 
     const saved = localStorage.getItem('demo_projects');
     if (saved) setProjects(JSON.parse(saved));
     else {
-      const starter = [
-        { id: 1, name: 'Website Redesign', description: 'Update UI/UX', status: 'active' },
-        { id: 2, name: 'Mobile App', description: 'Build cross-platform app', status: 'planning' }
-      ];
-      setProjects(starter);
-      localStorage.setItem('demo_projects', JSON.stringify(starter));
+      setProjects(initialProjectsSample);
+      localStorage.setItem('demo_projects', JSON.stringify(initialProjectsSample));
     }
-  },[]);
+  }, []);
 
   return (
     <div className="page dashboard-page">

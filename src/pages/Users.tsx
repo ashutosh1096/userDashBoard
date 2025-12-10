@@ -1,46 +1,65 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 
+interface Company {
+  name: string;
+}
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  company?: Company;
+  editing?: boolean;
+}
+
 const Users = () => {
-  const [users, setUsers] = useState([]);
-  const [filter, setFilter] = useState("");
-  const [sortBy, setSortBy] = useState(null);
+  const [users, setUsers] = useState<User[]>([]);
+  const [filter, setFilter] = useState<string>("");
+  const [debouncedFilter, setDebouncedFilter] = useState<string>("");
+  const [sortBy, setSortBy] = useState<string | null>(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
-  const [toDelete, setToDelete] = useState(null);
+  const [toDelete, setToDelete] = useState<{ id: number; name: string } | null>(null);
   const [editOpen, setEditOpen] = useState(false);
-  const [editUser, setEditUser] = useState(null);
+  const [editUser, setEditUser] = useState<User | null>(null);
+  const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const saved = localStorage.getItem("usersData");
-
     if (saved) {
       setUsers(JSON.parse(saved));
     } else {
-      axios
-        .get("https://jsonplaceholder.typicode.com/users")
+      axios.get("https://jsonplaceholder.typicode.com/users")
         .then((res) => {
-          const list = res.data.map((u) => ({ ...u, editing: false }));
+          const list: User[] = res.data.map((u: any) => ({ ...u, editing: false }));
           setUsers(list);
           localStorage.setItem("usersData", JSON.stringify(list));
         })
-        .catch(() => {});
+        .catch(() => { });
     }
   }, []);
 
-  function handleDeleteClick(id, name) {
+  useEffect(() => {
+    if (debounceTimeout.current) clearTimeout(debounceTimeout.current);
+    debounceTimeout.current = setTimeout(() => {
+      setDebouncedFilter(filter);
+    }, 350);
+    return () => {
+      if (debounceTimeout.current) clearTimeout(debounceTimeout.current);
+    };
+  }, [filter]);
+
+  function handleDeleteClick(id: number, name: string) {
     setToDelete({ id, name });
     setConfirmOpen(true);
   }
 
   function handleConfirmDelete() {
     if (!toDelete) return setConfirmOpen(false);
-
     setUsers((prev) => {
       const updated = prev.filter((u) => u.id !== toDelete.id);
       localStorage.setItem("usersData", JSON.stringify(updated));
       return updated;
     });
-
     setToDelete(null);
     setConfirmOpen(false);
   }
@@ -50,25 +69,24 @@ const Users = () => {
     setConfirmOpen(false);
   }
 
-  function openEditModal(user) {
-    setEditUser({ ...user, company: { ...(user.company || {}) } });
+  function openEditModal(user: User) {
+    setEditUser({ ...user, company: { name: user.company?.name || "" } });
     setEditOpen(true);
   }
 
-  function handleModalChange(field, value) {
-    setEditUser((prev) => ({ ...prev, [field]: value }));
+  function handleModalChange(field: keyof User, value: string) {
+    setEditUser((prev) => prev ? { ...prev, [field]: value } : prev);
   }
 
-  function handleModalChangeCompany(name) {
-    setEditUser((prev) => ({
+  function handleModalChangeCompany(name: string) {
+    setEditUser((prev) => prev ? {
       ...prev,
       company: { ...(prev.company || {}), name },
-    }));
+    } : prev);
   }
 
   function handleModalSave() {
     if (!editUser) return setEditOpen(false);
-
     setUsers((prev) => {
       const updated = prev.map((u) =>
         u.id === editUser.id ? { ...u, ...editUser } : u
@@ -76,7 +94,6 @@ const Users = () => {
       localStorage.setItem("usersData", JSON.stringify(updated));
       return updated;
     });
-
     setEditUser(null);
     setEditOpen(false);
   }
@@ -86,7 +103,7 @@ const Users = () => {
     setEditOpen(false);
   }
 
-  function handleChange(id, field, value) {
+  function handleChange(id: number, field: keyof User, value: any) {
     setUsers((prev) =>
       prev.map((u) => (u.id === id ? { ...u, [field]: value } : u))
     );
@@ -94,14 +111,14 @@ const Users = () => {
 
   const filtered = users.filter(
     (u) =>
-      u.name.toLowerCase().includes(filter.toLowerCase()) ||
-      u.email.toLowerCase().includes(filter.toLowerCase())
+      u.name.toLowerCase().includes(debouncedFilter.toLowerCase()) ||
+      u.email.toLowerCase().includes(debouncedFilter.toLowerCase())
   );
 
   const sorted = [...filtered].sort((a, b) => {
     if (!sortBy) return 0;
-    const av = a[sortBy] || "";
-    const bv = b[sortBy] || "";
+    const av = a[sortBy as keyof User] || "";
+    const bv = b[sortBy as keyof User] || "";
     return av.toString().localeCompare(bv.toString());
   });
 
@@ -138,13 +155,13 @@ const Users = () => {
           </div>
         </div>
 
-        <table className="users-table">
+        <table className="users-table" style={{ tableLayout: 'auto', width: '100%' }}>
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Company</th>
-              <th>Actions</th>
+              <th style={{ minWidth: 120, textAlign: 'left' }}>Name</th>
+              <th style={{ minWidth: 180, textAlign: 'left' }}>Email</th>
+              <th style={{ minWidth: 120, textAlign: 'left' }}>Company</th>
+              <th style={{ minWidth: 120, textAlign: 'left' }}>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -187,7 +204,7 @@ const Users = () => {
                   )}
                 </td>
                 <td>
-                  <div className="row-actions">
+                  <div className="row-actions" style={{ display: 'flex', flexDirection: 'row', gap: 8, flexWrap: 'nowrap' }}>
                     <button
                       onClick={() => openEditModal(u)}
                       className="btn-outline btn-sm"
@@ -195,7 +212,6 @@ const Users = () => {
                     >
                       Edit
                     </button>
-
                     <button
                       onClick={() => handleDeleteClick(u.id, u.name)}
                       className="btn-danger btn-sm"

@@ -10,7 +10,7 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     register(state, action) {
-      const users = JSON.parse(localStorage.getItem('users')) || [];
+      const users = JSON.parse(localStorage.getItem('users') || '[]');
       users.push(action.payload);
       localStorage.setItem('users', JSON.stringify(users));
       state.user = action.payload;
@@ -20,8 +20,8 @@ const authSlice = createSlice({
     },
     login(state, action) {
       const { email, password } = action.payload;
-      const users = JSON.parse(localStorage.getItem('users')) || [];
-      const user = users.find(u => u.email === email && u.password === password);
+      const users = JSON.parse(localStorage.getItem('users') || '[]');
+      const user = users.find((u: any) => u.email === email && u.password === password);
       if (user) {
         state.user = user;
         localStorage.setItem('loggedInUser', JSON.stringify(user));
@@ -37,7 +37,7 @@ const authSlice = createSlice({
     },
     loadUserFromStorage(state) {
       try {
-        const user = JSON.parse(localStorage.getItem('loggedInUser'));
+        const user = JSON.parse(localStorage.getItem('loggedInUser') || 'null');
         if (user) state.user = user;
       } catch {
         // ignore
